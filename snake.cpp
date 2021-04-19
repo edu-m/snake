@@ -26,7 +26,7 @@ struct Fruit
 } f;
 void Direction()
 {
-	if (Keyboard::isKeyPressed(Keyboard::Left)) //direzionamento
+	if (Keyboard::isKeyPressed(Keyboard::Left)) //direction control
 	{
 		if (dir == 3)
 		{
@@ -70,7 +70,7 @@ void Direction()
 			dir = 0;
 		}
 	}
-	if ((Keyboard::isKeyPressed(Keyboard::Space))) //evento pausa
+	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
 		pause = true;
 	}
@@ -95,7 +95,7 @@ void Tick()
 		if (dir == 2) s[0].x += 1;
 		if (dir == 3) s[0].y -= 1;
 
-		if ((s[0].x == f.x) && (s[0].y == f.y)) //evento frutto mangiato
+		if ((s[0].x == f.x) && (s[0].y == f.y)) //fruit eaten event
 		{
 			num++;
 			f.x = rand() % N;
@@ -108,7 +108,7 @@ void Tick()
 
 		for (int i2 = 1; i2 < num; i2++)
 		{
-			if (s[0].x == s[i2].x && s[0].y == s[i2].y) //evento morte
+			if (s[0].x == s[i2].x && s[0].y == s[i2].y) //death event
 			{
 				num = 4;
 				delay = 0.1;
@@ -174,7 +174,7 @@ int main()
 				return 0;
 			}
 
-			if (num < 19) //velocit� in relazione a lunghezza
+			if (num < 19) //speed-size correlation
 			{
 				delay = 0.1;
 			}
@@ -203,7 +203,7 @@ int main()
 
 			window.clear();
 
-			for (int i = 0; i < N; i++) //disegno sprite
+			for (int i = 0; i < N; i++) //sprite drawing function
 			{
 				for (int j = 0; j < M; j++)
 				{
@@ -216,7 +216,7 @@ int main()
 				}
 			}
 
-			text.setFont(font); //conteggio punti
+			text.setFont(font); //score count
 			int score = num - 4;
 			string str = to_string(score);
 			text.setString(str);
