@@ -13,7 +13,7 @@ int h = sz * M;
 double delay;
 int dir = 1, num = 4;
 
-bool pause = false;
+signed short pause = -1;
 
 struct Snake
 {
@@ -27,28 +27,28 @@ struct Fruit
 
 void Direction()
 {
-	if (Keyboard::isKeyPressed(Keyboard::Left)) //direction control
+	if ((Keyboard::isKeyPressed(Keyboard::Left) Keyboard::isKeyPressed(Keyboard::A))) //direction control
 	{
 		if (dir == 3 || dir == 0
 		{
 			dir = 1;
 		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Right))
+	if ((Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D)))
 	{
 		if (dir == 3 || dir == 0)
 		{
 			dir = 2;
 		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Up))
+	if ((Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W)))
 	{
 		if (dir == 1 || dir == 2)
 		{
 			dir = 3;
 		}
 	}
-	if (Keyboard::isKeyPressed(Keyboard::Down))
+	if ((Keyboard::isKeyPressed(Keyboard::Down)) || (Keyboard::isKeyPressed(Keyboard::S)))
 	{
 		if (dir == 1 || dir == 2)
 		{
@@ -57,17 +57,13 @@ void Direction()
 	}
 	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
-		pause = true;
-	}
-	if ((Keyboard::isKeyPressed(Keyboard::Enter)) && (pause == true))
-	{
-		pause = false;
+		i = i * -1;
 	}
 }
 
 void Tick()
 {
-	if (pause == false)
+	if (pause == -1)
 	{
 		for (int i1 = num; i1 > 0; --i1)
 		{
