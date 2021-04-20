@@ -12,6 +12,7 @@ int w = sz * N;
 int h = sz * M;
 double delay;
 int dir = 1, num = 4;
+Clock clock;
 
 signed short pause = -1;
 
@@ -25,7 +26,7 @@ struct Fruit
 	int x, y;
 } f;
 
-void Direction()
+void Direction(float t)
 {
 	if ((Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))) //direction control
 	{
@@ -57,8 +58,8 @@ void Direction()
 	}
 	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
-		pause = pause * -1;
-		//TODO: ADD 'DEBOUNCE' SO IT DOESNT CYCLE IF KEY IS PRESSED
+		if (t-lastSpacePress>3) pause = pause * -1;
+		static float lastSpacePress = clock.getElapsedTime().asSeconds();
 	}
 }
 
@@ -117,7 +118,7 @@ int main()
 	Sprite sprite2(t2);
 	Sprite sprite3(t3);
 
-	Clock clock;
+	
 	float timer = 0;
 
 	Font font;
@@ -138,7 +139,7 @@ int main()
 
 		timer += time;
 
-		Direction();
+		Direction(time);
 
 		Event e;
 		while (window.pollEvent(e))
