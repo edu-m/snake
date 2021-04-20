@@ -1,6 +1,7 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <windows.h>
+#include <iostream>
 using namespace sf;
 using namespace std;
 
@@ -12,7 +13,7 @@ int w = sz * N;
 int h = sz * M;
 double delay;
 int dir = 1, num = 4;
-Clock clock;
+Clock clock1;
 
 signed short pause = -1;
 
@@ -26,7 +27,7 @@ struct Fruit
 	int x, y;
 } f;
 
-void Direction(float t)
+void Direction()
 {
 	if ((Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))) //direction control
 	{
@@ -58,8 +59,22 @@ void Direction(float t)
 	}
 	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
-		if (t-lastSpacePress>3) pause = pause * -1;
-		static float lastSpacePress = clock.getElapsedTime().asSeconds();
+		pause = pause * -1;
+		Sleep(1000);
+	}
+}
+
+void wait()
+{
+
+	if ((Keyboard::isKeyPressed(Keyboard::Space))) //unpause event 
+	{
+		float t1 = 0;
+		while (t1 < 0.8)
+		{
+			t1 = clock1.getElapsedTime().asSeconds();
+		}
+		pause = -1;
 	}
 }
 
@@ -118,7 +133,7 @@ int main()
 	Sprite sprite2(t2);
 	Sprite sprite3(t3);
 
-	
+
 	float timer = 0;
 
 	Font font;
@@ -134,12 +149,13 @@ int main()
 
 	while (window.isOpen())
 	{
-		float time = clock.getElapsedTime().asSeconds();
-		clock.restart();
+		float time = clock1.getElapsedTime().asSeconds();
+		clock1.restart();
 
 		timer += time;
 
-		Direction(time);
+		if (pause == true) wait();
+		else Direction();
 
 		Event e;
 		while (window.pollEvent(e))
