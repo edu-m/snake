@@ -24,48 +24,33 @@ struct Fruit
 {
 	int x, y;
 } f;
+
 void Direction()
 {
 	if (Keyboard::isKeyPressed(Keyboard::Left)) //direction control
 	{
-		if (dir == 3)
-		{
-			dir = 1;
-		}
-		else if (dir == 0)
+		if (dir == 3 || dir == 0
 		{
 			dir = 1;
 		}
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Right))
 	{
-		if (dir == 3)
-		{
-			dir = 2;
-		}
-		else if (dir == 0)
+		if (dir == 3 || dir == 0)
 		{
 			dir = 2;
 		}
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Up))
 	{
-		if (dir == 1)
-		{
-			dir = 3;
-		}
-		else if (dir == 2)
+		if (dir == 1 || dir == 2)
 		{
 			dir = 3;
 		}
 	}
 	if (Keyboard::isKeyPressed(Keyboard::Down))
 	{
-		if (dir == 1)
-		{
-			dir = 0;
-		}
-		else if (dir == 2)
+		if (dir == 1 || dir == 2)
 		{
 			dir = 0;
 		}
