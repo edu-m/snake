@@ -1,7 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <time.h>
 #include <windows.h>
-#include <iostream>
 using namespace sf;
 using namespace std;
 
