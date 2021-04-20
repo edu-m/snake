@@ -100,7 +100,7 @@ void Tick()
 				Sleep(3000);
 				s[0].x = rand() % N;
 				s[0].y = rand() % M;
-				dir = 2;
+				dir = rand() % 4 + 1; //random direction
 			}
 		}
 	}
