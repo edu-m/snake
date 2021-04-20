@@ -15,7 +15,7 @@ int dir = 1, num = 4;
 
 signed short pause = -1;
 
-struct Snake
+struct Snake //might change to class?
 {
 	int x, y;
 }  s[150];
@@ -27,9 +27,9 @@ struct Fruit
 
 void Direction()
 {
-	if ((Keyboard::isKeyPressed(Keyboard::Left) Keyboard::isKeyPressed(Keyboard::A))) //direction control
+	if ((Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))) //direction control
 	{
-		if (dir == 3 || dir == 0
+		if (dir == 3 || dir == 0)
 		{
 			dir = 1;
 		}
@@ -57,7 +57,8 @@ void Direction()
 	}
 	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
-		i = i * -1;
+		pause = pause * -1;
+		//TODO: ADD 'DEBOUNCE' SO IT DOESNT CYCLE IF KEY IS PRESSED
 	}
 }
 
@@ -100,10 +101,6 @@ void Tick()
 			}
 		}
 	}
-	else
-	{
-
-	}
 }
 
 int main()
@@ -128,7 +125,7 @@ int main()
 
 	Text text;
 	text.setCharacterSize(24);
-	text.setPosition(540,2);
+	text.setPosition(540, 2);
 	text.setFillColor(sf::Color::Black);
 
 	f.x = 10;
@@ -139,80 +136,80 @@ int main()
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
 
-			timer += time;
+		timer += time;
 
-			Direction();
+		Direction();
 
-			Event e;
-			while (window.pollEvent(e))
-			{
-				if (e.type == Event::Closed)
-					window.close();
-			}
+		Event e;
+		while (window.pollEvent(e))
+		{
+			if (e.type == Event::Closed)
+				window.close();
+		}
 
-			if (Keyboard::isKeyPressed(Keyboard::Escape))
-			{
-				return 0;
-			}
+		if (Keyboard::isKeyPressed(Keyboard::Escape))
+		{
+			return 0;
+		}
 
-			if (num < 19) //speed-size correlation
-			{
-				delay = 0.1;
-			}
-			if (num == 27)
-			{
-				delay = 0.07;
-			}
-			if (num == 39)
-			{
-				delay = 0.05;
-			}
-			if (num == 56)
-			{
-				delay = 0.03;
-			}
-			if (num == 69)
-			{
-				delay = 0.015;
-			}
+		if (num < 19) //speed-size correlation
+		{
+			delay = 0.1;
+		}
+		if (num == 27)
+		{
+			delay = 0.07;
+		}
+		if (num == 39)
+		{
+			delay = 0.05;
+		}
+		if (num == 56)
+		{
+			delay = 0.03;
+		}
+		if (num == 69)
+		{
+			delay = 0.015;
+		}
 
-			if (timer > delay)
+		if (timer > delay)
+		{
+			timer = 0;
+			Tick();
+		}
+
+		window.clear();
+
+		for (int i = 0; i < N; i++) //sprite drawing function
+		{
+			for (int j = 0; j < M; j++)
 			{
-				timer = 0;
-				Tick();
-			}
-
-			window.clear();
-
-			for (int i = 0; i < N; i++) //sprite drawing function
-			{
-				for (int j = 0; j < M; j++)
-				{
-					sprite1.setPosition(i * sz, j * sz);  window.draw(sprite1);
-				}
-
-				for (int i = 0; i < num; i++)
-				{
-					sprite2.setPosition(s[i].x * sz, s[i].y * sz);  window.draw(sprite2);
-				}
+				sprite1.setPosition(i * sz, j * sz);  window.draw(sprite1);
 			}
 
-			text.setFont(font); //score count
-			int score = num - 4;
-			string str = to_string(score);
-			text.setString(str);
-			if(score>=10)
+			for (int i = 0; i < num; i++)
 			{
-				text.setPosition(535, 2);
+				sprite2.setPosition(s[i].x * sz, s[i].y * sz);  window.draw(sprite2);
 			}
-			else
-			{
-				text.setPosition(540, 2);
-			}
+		}
 
-			sprite3.setPosition(f.x * sz, f.y * sz);  window.draw(sprite3);
-			window.draw(text);
-			window.display();
+		text.setFont(font); //score count
+		int score = num - 4;
+		string str = to_string(score);
+		text.setString(str);
+		if (score >= 10)
+		{
+			text.setPosition(535, 2);
+		}
+		else
+		{
+			text.setPosition(540, 2);
+		}
+
+		sprite3.setPosition(f.x * sz, f.y * sz);  window.draw(sprite3);
+		window.draw(text);
+		window.display();
 	}
 	return 0;
 }
