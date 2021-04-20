@@ -15,7 +15,7 @@ double delay;
 int dir = 1, num = 4;
 Clock clock1;
 
-signed short pause = -1;
+bool pause = false;
 
 struct Snake //might change to class?
 {
@@ -59,7 +59,7 @@ void Direction()
 	}
 	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
 	{
-		pause = pause * -1;
+		pause = true;
 		Sleep(1000);
 	}
 }
@@ -74,13 +74,13 @@ void wait()
 		{
 			t1 = clock1.getElapsedTime().asSeconds();
 		}
-		pause = -1;
+		pause = false;
 	}
 }
 
 void Tick()
 {
-	if (pause == -1)
+	if (pause == false)
 	{
 		for (int i1 = num; i1 > 0; --i1)
 		{
