@@ -30,6 +30,7 @@ void Tick();
 
 bool pause = false;
 
+
 struct Snake
 {
 	int x, y;
