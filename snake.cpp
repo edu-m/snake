@@ -4,20 +4,33 @@
 using namespace sf;
 using namespace std;
 
+#define SPEED1 0.1
+#define SPEED2 0.07
+#define SPEED3 0.05
+#define SPEED4 0.03
+#define SPEED5 0.015
+
 int i1;
 int i2;
 int N = 70, M = 47;
 int sz = 8;
 int w = sz * N;
 int h = sz * M;
-double delay;
+double delay=SPEED1;
 int dir = 1, num = 4;
 bool overrideSpeed = false;
 Clock clock1;
 
+bool containedWithin(int, int, int);
+void overrideSpeedFunc(bool);
+void Direction();
+void wait();
+void checkSpeed();
+void Tick();
+
 bool pause = false;
 
-struct Snake //might change to class?
+struct Snake
 {
 	int x, y;
 } s[150];
@@ -26,6 +39,15 @@ struct Fruit
 {
 	int x, y;
 } f;
+
+
+bool containedWithin(int lBound, int hBound, int num)
+{
+	if (num < hBound && num > lBound)
+		return true;
+	else
+		return false;
+}
 
 void overrideSpeedFunc(bool a)
 {
@@ -37,6 +59,7 @@ void overrideSpeedFunc(bool a)
 	else
 	{
 		overrideSpeed = false;
+		checkSpeed();
 	}
 	Sleep(255);
 }
@@ -106,6 +129,24 @@ void wait()
 	}
 }
 
+void checkSpeed()
+{
+	if (!overrideSpeed)
+	{
+		if (containedWithin(1, 19, num))
+			delay = SPEED1;
+		else if (containedWithin(19, 27, num))
+			delay = SPEED2;
+		else if (containedWithin(27, 39, num))
+			delay = SPEED3;
+		else if (containedWithin(39, 56, num))
+			delay = SPEED4;
+		if (num >= 56)
+			delay = SPEED5;
+	}
+}
+
+
 void Tick()
 {
 	if (pause == false)
@@ -130,6 +171,7 @@ void Tick()
 			num++;
 			f.x = rand() % N;
 			f.y = rand() % M;
+			checkSpeed();
 		}
 
 		if (s[0].x > N)
@@ -157,35 +199,8 @@ void Tick()
 	}
 }
 
-bool containedWithin(int lBound, int hBound, int num)
-{
-	if (num < hBound && num > lBound)
-		return true;
-	else
-		return false;
-}
-#define SPEED1 0.1
-#define SPEED2 0.07
-#define SPEED3 0.05
-#define SPEED4 0.03
-#define SPEED5 0.015
 
-void checkSpeed()
-{
-	if (!overrideSpeed)
-	{
-		if (containedWithin(1, 19, num))
-			delay = SPEED1;
-		else if (containedWithin(19, 27, num))
-			delay = SPEED2;
-		else if (containedWithin(27, 39, num))
-			delay = SPEED3;
-		else if (containedWithin(39, 56, num))
-			delay = SPEED4;
-		if (num >= 56)
-			delay = SPEED5;
-	}
-}
+
 
 int main()
 {
@@ -238,7 +253,6 @@ int main()
 			return 0;
 		}
 
-		checkSpeed();
 
 		if (timer > delay)
 		{
