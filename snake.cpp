@@ -6,12 +6,13 @@ using namespace std;
 
 int i1;
 int i2;
-int N = 70, M = 38;
+int N = 70, M = 47;
 int sz = 8;
 int w = sz * N;
 int h = sz * M;
 double delay;
 int dir = 1, num = 4;
+bool overrideSpeed = false;
 Clock clock1;
 
 bool pause = false;
@@ -19,12 +20,26 @@ bool pause = false;
 struct Snake //might change to class?
 {
 	int x, y;
-}  s[150];
+} s[150];
 
 struct Fruit
 {
 	int x, y;
 } f;
+
+void overrideSpeedFunc(bool a)
+{
+	if (a)
+	{
+		overrideSpeed = true;
+		delay = 0.015;
+	}
+	else
+	{
+		overrideSpeed = false;
+	}
+	Sleep(255);
+}
 
 void Direction()
 {
@@ -56,17 +71,31 @@ void Direction()
 			dir = 0;
 		}
 	}
-	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event 
+	if ((Keyboard::isKeyPressed(Keyboard::Space))) //pause event
 	{
 		pause = true;
 		Sleep(1000);
+	}
+	if ((Keyboard::isKeyPressed(Keyboard::O))) //pause event
+	{
+		bool a;
+		if (!overrideSpeed)
+		{
+			a = true;
+			overrideSpeedFunc(a);
+		}
+		else
+		{
+			a = false;
+			overrideSpeedFunc(a);
+		}
 	}
 }
 
 void wait()
 {
 
-	if ((Keyboard::isKeyPressed(Keyboard::Space))) //unpause event 
+	if ((Keyboard::isKeyPressed(Keyboard::Space))) //unpause event
 	{
 		float t1 = 0;
 		while (t1 < 0.8)
@@ -87,10 +116,14 @@ void Tick()
 			s[i1].y = s[i1 - 1].y;
 		}
 
-		if (dir == 0) s[0].y += 1;
-		if (dir == 1) s[0].x -= 1;
-		if (dir == 2) s[0].x += 1;
-		if (dir == 3) s[0].y -= 1;
+		if (dir == 0)
+			s[0].y += 1;
+		if (dir == 1)
+			s[0].x -= 1;
+		if (dir == 2)
+			s[0].x += 1;
+		if (dir == 3)
+			s[0].y -= 1;
 
 		if ((s[0].x == f.x) && (s[0].y == f.y)) //fruit eaten event
 		{
@@ -99,22 +132,58 @@ void Tick()
 			f.y = rand() % M;
 		}
 
-		if (s[0].x > N) s[0].x = 0;  if (s[0].x < 0) s[0].x = N; //wraparound
-		if (s[0].y > M) s[0].y = 0;  if (s[0].y < 0) s[0].y = M;
-
+		if (s[0].x > N)
+			s[0].x = 0;
+		if (s[0].x < 0)
+			s[0].x = N; //wraparound
+		if (s[0].y > M)
+			s[0].y = 0;
+		if (s[0].y < 0)
+			s[0].y = M;
 
 		for (int i2 = 1; i2 < num; i2++)
 		{
 			if (s[0].x == s[i2].x && s[0].y == s[i2].y) //death event
 			{
 				num = 4;
-				delay = 0.1;
+				if (!overrideSpeed)
+					delay = 0.1;
 				Sleep(3000);
 				s[0].x = rand() % N;
 				s[0].y = rand() % M;
 				dir = rand() % 4 + 1; //random direction
 			}
 		}
+	}
+}
+
+bool containedWithin(int lBound, int hBound, int num)
+{
+	if (num < hBound && num > lBound)
+		return true;
+	else
+		return false;
+}
+#define SPEED1 0.1
+#define SPEED2 0.07
+#define SPEED3 0.05
+#define SPEED4 0.03
+#define SPEED5 0.015
+
+void checkSpeed()
+{
+	if (!overrideSpeed)
+	{
+		if (containedWithin(1, 19, num))
+			delay = SPEED1;
+		else if (containedWithin(19, 27, num))
+			delay = SPEED2;
+		else if (containedWithin(27, 39, num))
+			delay = SPEED3;
+		else if (containedWithin(39, 56, num))
+			delay = SPEED4;
+		if (num >= 56)
+			delay = SPEED5;
 	}
 }
 
@@ -131,7 +200,6 @@ int main()
 	Sprite sprite1(t1);
 	Sprite sprite2(t2);
 	Sprite sprite3(t3);
-
 
 	float timer = 0;
 
@@ -153,8 +221,10 @@ int main()
 
 		timer += time;
 
-		if (pause == true) wait();
-		else Direction();
+		if (pause == true)
+			wait();
+		else
+			Direction();
 
 		Event e;
 		while (window.pollEvent(e))
@@ -168,26 +238,7 @@ int main()
 			return 0;
 		}
 
-		if (num < 19) //speed-size correlation
-		{
-			delay = 0.1;
-		}
-		if (num == 27)
-		{
-			delay = 0.07;
-		}
-		if (num == 39)
-		{
-			delay = 0.05;
-		}
-		if (num == 56)
-		{
-			delay = 0.03;
-		}
-		if (num == 69)
-		{
-			delay = 0.015;
-		}
+		checkSpeed();
 
 		if (timer > delay)
 		{
@@ -201,12 +252,14 @@ int main()
 		{
 			for (int j = 0; j < M; j++)
 			{
-				sprite1.setPosition(i * sz, j * sz);  window.draw(sprite1);
+				sprite1.setPosition(i * sz, j * sz);
+				window.draw(sprite1);
 			}
 
 			for (int i = 0; i < num; i++)
 			{
-				sprite2.setPosition(s[i].x * sz, s[i].y * sz);  window.draw(sprite2);
+				sprite2.setPosition(s[i].x * sz, s[i].y * sz);
+				window.draw(sprite2);
 			}
 		}
 
@@ -223,7 +276,8 @@ int main()
 			text.setPosition(540, 2);
 		}
 
-		sprite3.setPosition(f.x * sz, f.y * sz);  window.draw(sprite3);
+		sprite3.setPosition(f.x * sz, f.y * sz);
+		window.draw(sprite3);
 		window.draw(text);
 		window.display();
 	}
