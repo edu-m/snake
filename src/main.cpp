@@ -5,9 +5,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <cstdint>
 #include <cstdlib>
+#include <fcntl.h>
 #include <time.h>
 #include <unistd.h>
-#include <fcntl.h>
 using namespace sf;
 using namespace std;
 
