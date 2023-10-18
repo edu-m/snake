@@ -20,17 +20,15 @@ public:
 
   bool isGamePaused() const { return this->paused; }
 
-  void togglePauseGame(){this->paused = !this->paused;}
+  void togglePauseGame() { this->paused = !this->paused; }
 
-  Direction getDirection() const {
-    return this->direction;
-  }
+  Direction getDirection() const { return this->direction; }
 
   int getSize() const { return this->size; }
 
   float getSpeed() const { return this->speed; }
 
-  vector<pair<int, int>> *getPos() { return &this->pos; }
+  const vector<pair<int, int>> *getPos() const { return &this->pos; }
 
   void setSize(int _size) { this->size = _size; }
 
@@ -95,7 +93,7 @@ private:
 
   Snake() {
     this->paused = false;
-    this->size = DEFAULT_SNAKE_SIZE+4;
+    this->size = DEFAULT_SNAKE_SIZE + 4;
     this->pos = vector<pair<int, int>>(SNAKE_MAX_SIZE - 1);
     this->setPosIndex(make_pair(15, 10), 0);
     this->direction = Direction::left;
